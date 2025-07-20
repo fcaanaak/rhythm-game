@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://2k66ymhe8dcq"]
+
+[ext_resource type="Script" uid="uid://d0gvcbl7fcl0j" path="res://Level Editor/track_line_manager.gd" id="1_elpi8"]
+
+[node name="TrackLineManager" type="Node2D"]
+script = ExtResource("1_elpi8")

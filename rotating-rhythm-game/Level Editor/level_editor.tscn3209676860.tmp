@@ -1,0 +1,25 @@
+[gd_scene load_steps=6 format=3 uid="uid://diicyerhxx7vk"]
+
+[ext_resource type="Script" uid="uid://b4vpkaqlnqmel" path="res://Level Editor/level_editor.gd" id="1_3a4ln"]
+[ext_resource type="PackedScene" uid="uid://cblimay4064r3" path="res://Level Editor/track_line.tscn" id="2_4too8"]
+[ext_resource type="PackedScene" uid="uid://2k66ymhe8dcq" path="res://Level Editor/TrackLineManager.tscn" id="3_4too8"]
+[ext_resource type="Script" uid="uid://dv073eja203gj" path="res://Level Editor/level_cam.gd" id="4_nmvd2"]
+[ext_resource type="Texture2D" uid="uid://bninrp5b5t2g6" path="res://assets/sprites/level_editor_current_beat_arrow.png" id="5_w71re"]
+
+[node name="LevelEditor" type="Node2D"]
+script = ExtResource("1_3a4ln")
+
+[node name="TrackLineManager" parent="." instance=ExtResource("3_4too8")]
+
+[node name="TrackLine" parent="." instance=ExtResource("2_4too8")]
+
+[node name="LevelCam" type="Camera2D" parent="."]
+script = ExtResource("4_nmvd2")
+
+[node name="CurrentBeatArrow" type="Sprite2D" parent="."]
+position = Vector2(64, 64)
+scale = Vector2(0.08, 0.08)
+texture = ExtResource("5_w71re")
+
+[connection signal="camera_moved" from="." to="LevelCam" method="_on_level_editor_camera_moved"]
+[connection signal="lines_redrawn" from="." to="TrackLineManager" method="_on_level_editor_lines_redrawn"]

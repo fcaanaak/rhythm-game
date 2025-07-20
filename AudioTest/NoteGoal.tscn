@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://wwopn5kr8bi5"]
+
+[ext_resource type="Script" uid="uid://carbfcoyj7oxp" path="res://NoteGoal.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://d3tq12sb5sai6" path="res://resources/note_goal.png" id="2"]
+
+[node name="NoteGoal" type="Sprite2D"]
+scale = Vector2(1.3, 1.3)
+texture = ExtResource("2")
+script = ExtResource("1")

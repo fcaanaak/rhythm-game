@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://dudbrgd4cc2f1"]
+
+[ext_resource type="Script" uid="uid://dpr55vcu0nepn" path="res://Note.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://dwco5ya0ucd4e" path="res://resources/test_note.png" id="2"]
+
+[node name="Note" type="Sprite2D"]
+rotation = 1.5708
+scale = Vector2(1.3, 1.3)
+texture = ExtResource("2")
+script = ExtResource("1")

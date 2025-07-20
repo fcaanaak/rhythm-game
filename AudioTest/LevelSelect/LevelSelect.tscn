@@ -1,0 +1,126 @@
+[gd_scene load_steps=10 format=3 uid="uid://cw8dg2w58td30"]
+
+[ext_resource type="Script" uid="uid://c0t8ijrrupor0" path="res://LevelSelect/LevelSelect.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://cqfykpjakwbko" path="res://resources/images/level_select_grid_bg.png" id="2"]
+[ext_resource type="PackedScene" path="res://LevelSelect/LevelSelectButton.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://LevelSelect/SongNameLabel.tscn" id="4"]
+[ext_resource type="FontFile" path="res://resources/fonts/test_font.tres" id="5"]
+[ext_resource type="PackedScene" path="res://TransitionScene/TransitionScreen.tscn" id="6"]
+[ext_resource type="Texture2D" uid="uid://d2uh78era31nj" path="res://resources/images/delete_icon.png" id="7"]
+[ext_resource type="Texture2D" uid="uid://dbsgtp4f4imbj" path="res://resources/images/group_nav_arrow.png" id="8"]
+[ext_resource type="Texture2D" uid="uid://c2kwmkkf0h00p" path="res://resources/images/up_nav_arrow.png" id="9"]
+
+[node name="LevelSelect" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -5.0
+offset_top = -15.0
+offset_right = -5.0
+offset_bottom = -15.0
+script = ExtResource("1")
+level_select_button = ExtResource("3")
+song_name_label = ExtResource("4")
+
+[node name="LevelGridBG" type="Sprite2D" parent="."]
+texture = ExtResource("2")
+
+[node name="LevelInfoData" type="VBoxContainer" parent="."]
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 49.0
+offset_top = -76.0
+offset_right = 89.0
+offset_bottom = 76.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="SongTitle" type="Label" parent="LevelInfoData"]
+offset_right = 40.0
+offset_bottom = 32.0
+theme_override_fonts/font = ExtResource("5")
+
+[node name="ArtistTitle" type="Label" parent="LevelInfoData"]
+offset_top = 36.0
+offset_right = 40.0
+offset_bottom = 68.0
+theme_override_fonts/font = ExtResource("5")
+
+[node name="BPMTitle" type="Label" parent="LevelInfoData"]
+offset_top = 72.0
+offset_right = 40.0
+offset_bottom = 104.0
+theme_override_fonts/font = ExtResource("5")
+
+[node name="SongDurationTitle" type="Label" parent="LevelInfoData"]
+offset_top = 108.0
+offset_right = 40.0
+offset_bottom = 140.0
+theme_override_fonts/font = ExtResource("5")
+
+[node name="LevelPlayButton" type="Button" parent="."]
+visible = false
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -132.0
+offset_right = 246.0
+offset_bottom = -57.0
+theme_override_fonts/font = ExtResource("5")
+text = "Play"
+
+[node name="EditSelectButton" type="Button" parent="."]
+visible = false
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -131.0
+offset_right = 248.0
+offset_bottom = -55.0
+theme_override_fonts/font = ExtResource("5")
+text = "Edit"
+
+[node name="TransitionScreen" parent="." instance=ExtResource("6")]
+visible = false
+
+[node name="BackButton" type="Button" parent="."]
+offset_left = 13.0
+offset_top = 8.0
+offset_right = 283.0
+offset_bottom = 49.0
+theme_override_fonts/font = ExtResource("5")
+text = "Back to main menu"
+
+[node name="DeleteButton" type="Button" parent="."]
+offset_left = 294.0
+offset_top = 12.0
+offset_right = 443.0
+offset_bottom = 149.0
+icon = ExtResource("7")
+icon_alignment = 1
+expand_icon = true
+
+[node name="LevelGroupUp" type="Button" parent="."]
+offset_left = 251.0
+offset_top = 188.0
+offset_right = 327.0
+offset_bottom = 258.0
+rotation = -359.999
+size_flags_vertical = 3
+icon = ExtResource("9")
+flat = true
+
+[node name="LevelGroupDown" type="Button" parent="."]
+offset_left = 251.0
+offset_top = 253.0
+offset_right = 327.0
+offset_bottom = 324.0
+size_flags_vertical = 3
+icon = ExtResource("8")
+flat = true
+expand_icon = true
+
+[connection signal="pressed" from="LevelPlayButton" to="." method="_on_LevelPlayButton_pressed"]
+[connection signal="pressed" from="EditSelectButton" to="." method="_on_EditSelectButton_pressed"]
+[connection signal="pressed" from="BackButton" to="." method="_on_BackButton_pressed"]
+[connection signal="pressed" from="DeleteButton" to="." method="_on_DeleteButton_pressed"]
+[connection signal="pressed" from="LevelGroupUp" to="." method="_on_LevelGroupUp_pressed"]
+[connection signal="pressed" from="LevelGroupDown" to="." method="_on_LevelGroupDown_pressed"]

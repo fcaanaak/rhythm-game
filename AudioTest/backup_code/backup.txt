@@ -1,0 +1,980 @@
+extends Node2D
+
+
+var selected_beat = 0 # Which beat is the user currently editing
+
+var current_note_type # What type of note is the user actively selecting
+
+var song_time
+
+# A variable that will hold an index which will be used to determine
+# which beat to snap to
+var beat_add_index = 0
+
+# A list of all the possible beat fractions
+var beat_mods = [
+4.0/4.0, # full beat or 4th note
+4.0/8.0, # half beat or 8th note
+4.0/12, # third of a beat or 12th note
+4.0/16, # quarter beat or 16th note
+4.0/24, # 6th of a beat or 24th note
+4.0/32, # 8th of a beat or 32nd note
+4.0/48, # 12th of a beat or 48th note
+4.0/64, # 16th of a beat or 64th note
+4.0/96, # 24th of a beat or 96th note
+#4.0/128,# 32nd of a beat or 128th note
+#4.0/192, # 48th of a beat or 192th note
+]
+
+# An array which will hold all of the different chart zooming configurations
+var zoom_mods = [
+	16,
+	12,
+	8,
+	4
+]
+
+# A multiplier for how much space one beat should take on the screen
+# For example if its 16, then each beat should take up one 16th of the screen
+var beat_to_screen_mod = 16
+
+var zoom_mod_index = 0
+
+export (PackedScene) var beat_marker
+
+onready var audio_player = $AudioStreamPlayer
+
+# A camera to scroll through the editor
+onready var camera = $LevelScrollCamera
+
+# A sprite to point to the current active beat
+onready var beat_pointer = $BeatPointer
+
+onready var tweener = $Tween
+
+var bar_marker_num = 0# An integer which will be put next to each bar
+
+# An array to hold each beat marker
+var beat_marker_list = []
+
+# An array to hold each note marker
+var note_marker_list = []
+
+var bar_marker_list = []
+
+var hold_note_activators = {
+	1: false,# NW
+	2: false,# SW
+	3: false,# NE
+	4: false# SE
+}
+
+var hold_note_mode = false
+# A dictionary to hold all the data for the song
+
+
+
+# Note data will have information for an editor instance which will be the 
+# note class, a beat which will be used for placement and track for which 
+# direction it will approach from
+
+onready var song_data = {
+	"song length":0,
+	"song stream":null,
+	"bpm":Data.curr_song_bpm,
+	
+	"note data":[
+		
+	],
+	
+	"hold note data":[
+		
+	]
+}
+
+# A variable to hold the dimensions of one bar, this will allow the 
+# beat pointer arrow to stay in the same place regardless of screen size
+var bar_line_rect
+
+var total_beats
+
+
+func beat_to_screen_length(beat):
+	var length = Data.screen_size.y * (beat+1)/beat_to_screen_mod
+	
+	return length
+	
+
+func hold_note_overlap_remove():
+	"""
+	A function which will check to see if any hold notes are currently
+	overlapping any tap notes and if so, will remove the tap notes. 
+	"""
+
+	for hold_note in song_data["hold note data"]:
+		
+		# If the hold note in the hold note data dict is currently being edited
+		if hold_note["is current"]:
+			
+			# Look for all the notes in the edited hold notes track
+			for note in song_data["note data"]:
+				if hold_note["track"] == note["track"]:
+					
+					# If we current beat we are on is on a note (This means we moved the hold note 
+					# to the position of a tap note), then remove the tap note 
+					if hold_note["start beat"] <= note["beat"] and selected_beat >= note["beat"] :
+						note["editor instance"].queue_free()
+						song_data["note data"].erase(note)
+
+
+func hold_note_hold_overlap_remove():
+	"""
+	A function to handle behavior for what happens if two
+	hold notes overlap each other while one is being created
+	in the editor
+	"""
+	
+	var new_start_beat
+	
+	var current_hold_notes = []
+	var new_end_beat
+	var new_track
+	
+	for hold_note in song_data["hold note data"]:
+		
+		# For all the hold notes currently being edited
+		if hold_note["is current"]:
+			
+			# Loop through the array again but this time check for all the notes that arent being edited
+			for other_hold_note in song_data["hold note data"]:
+				
+				# If the currently edited hold note and another note have both the same track
+				if hold_note["track"] == other_hold_note["track"] and not other_hold_note["is current"]:
+					
+					# If user is currently on a preexisting hold note
+					if selected_beat >= other_hold_note["start beat"] and selected_beat <= other_hold_note["end beat"]:
+						
+						# Set these variables
+						new_start_beat = hold_note["start beat"]
+						new_end_beat = other_hold_note["end beat"]
+						new_track = hold_note["track"]
+						
+						# Delete both the intersecting hold notes and instead create a new longer
+						# one using their data
+						other_hold_note["editor instance"].queue_free()
+						hold_note["editor instance"].queue_free()
+						
+						# Set this to false so that the program knows we are no longer creating a hold note
+						hold_note_activators[hold_note["track"]] = false
+
+						song_data["hold note data"].erase(other_hold_note)
+						song_data["hold note data"].erase(hold_note)
+						
+						# This bottom section is mostly so the program doesnt crash
+						var new_hold_marker = Sprite.new()
+		
+						new_hold_marker.texture = load("res://resources/note.png")
+						
+						# remove later and just make the note sprite smaller
+						new_hold_marker.scale = Vector2(0.5,0.5)
+						
+						new_hold_marker.position.y = Data.screen_size.y * selected_beat/beat_to_screen_mod \
+						+ (Data.screen_size.y/beat_to_screen_mod)
+						
+						
+						# Add the new longer hold note to our hold note database
+						song_data["hold note data"].append(
+								
+								{
+									"start beat":new_start_beat,
+									"track":new_track,
+									"end beat": new_end_beat,
+									"is current": false,
+									"editor instance":new_hold_marker,
+									
+								}
+								
+							)
+							
+						add_child(new_hold_marker)
+						
+	# Debug printing
+	#print(song_data["hold note data"])
+	
+	
+func master_input_detect():
+	
+	# Check to see if the user placed any notes
+	note_place()
+	
+	if Input.is_action_just_pressed("ui_down"):
+		
+		# If the user holds down the ctrl key, expand the editor so they can see more
+		if Input.is_action_pressed("zoom_enable"):
+			zoom_in()
+
+		else:
+			
+			# If the user isn't zooming, increment the beat
+			hold_note_overlap_remove()
+			beat_increment()
+			
+			# Use this when creating hold notes to remove any tap notes that 
+			# we go over when creating a hold note
+			hold_note_overlap_remove()
+			
+			hold_note_hold_overlap_remove()
+			
+			hold_note_grow_picker()
+
+	if Input.is_action_just_pressed("ui_up"):
+		
+		# If the user has pressed both the ctrl key and navigated up to zoom out 
+		if Input.is_action_pressed("zoom_enable"):
+			zoom_out()
+				
+			
+		else:
+				
+				# If we are currently editing a hold note, make sure that the user cannot
+				# go above the hold notes starting position
+				if hold_note_boundary_check():
+					
+					beat_decrement()
+				
+					hold_note_grow_picker()
+			
+
+	# Left and right are for moving through the beat mod array
+	if Input.is_action_just_pressed("ui_left"):
+		
+		# if not on the first beat add index option
+		previous_beat_mod()
+			
+		
+	if Input.is_action_just_pressed("ui_right"):
+		#if not on the last beat mod option
+		next_beat_mod()
+	
+	if Input.is_action_just_pressed("clear_all_notes"):
+		clearall()
+	
+	
+	# Hold note stuff
+	if Input.is_action_just_pressed("hold_note_enable"):
+		hold_note_mode = true
+		
+		
+	if Input.is_action_just_released("hold_note_enable"):
+		hold_note_mode = false
+	
+
+func hold_note_boundary_check():
+	"""
+	A function which check to see if the current beat is on the beginning
+	of a hold note that is being created, this is meant to prevent the user
+	from creating hold notes where the start beat is greater than the end beat
+	"""
+	
+	
+	var curr_list = []
+		
+	# Append all the start beats of the hold notes currently being created to an array
+	for hold_note in song_data["hold note data"]:
+		
+		if hold_note["is current"]:
+			curr_list.append(hold_note["start beat"])
+			
+	
+	# If the current beat is NOT equal to the hold note with the greatest start note
+	# return true
+	if selected_beat != curr_list.max():
+		return true
+		
+	
+########################################################
+# FUNCTIONS FOR ZOOMING IN AND OUT OF THE BEATMAP
+########################################################
+func other_zoom_update():
+	"""A method to update the other nodes such as the camera
+	and beat pointer when the editor is zoomed"""
+	
+	camera.position.y = Data.screen_size.y * selected_beat/beat_to_screen_mod +(Data.screen_size.y/beat_to_screen_mod)	
+	beat_pointer.position.y = (selected_beat + 1)/beat_to_screen_mod * Data.screen_size.y
+
+func note_zoom_update():
+	"""A method that will update all the notes that have been currently placed
+	and move them to the current beat they occupy by placing them on a beat marker
+	with the same beat as the note
+	"""
+	
+	for note_container in song_data["note data"]:
+		
+		note_container["editor instance"].position.y = Data.screen_size.y * note_container["beat"]/beat_to_screen_mod \
+		+ (Data.screen_size.y/beat_to_screen_mod)
+	
+func zoom_in():
+	"""A function which will effectively 'zoom' the screen by increasing the
+	margins between beats in the editor. This is done by changing the beat_to_screen_mod
+	variable which is responsible for dividing the screen into beats."""
+	
+	# If we are not on the last option of the zoom mods array
+	if zoom_mods[zoom_mod_index] != zoom_mods[-1]:
+				
+				zoom_mod_index += 1
+				beat_to_screen_mod = zoom_mods[zoom_mod_index]
+				
+				beat_marker_zoom_update()# Update all the beat markers
+				
+				# Keeping this in stops stuff from breaking so its staying
+				selected_beat -= (fposmod(selected_beat,beat_mods[beat_add_index])) 
+				
+				other_zoom_update()# Update other nodes like cameras
+				
+				note_zoom_update()# Update all the current notes placed in the beatmap
+				
+				hold_note_grow_picker(true)
+				
+
+func zoom_out():
+	"""
+	A function complimentary to zoom_in() which will instead zoom the editor out.
+	This will effectively compress the chart.
+	"""
+	
+	# if we aren't on the first zoom mod option
+	if zoom_mod_index > 0:
+		
+		zoom_mod_index -= 1
+		beat_to_screen_mod = zoom_mods[zoom_mod_index]
+				
+		beat_marker_zoom_update()
+				
+		# Keeping this in stops stuff from breaking so its staying
+		selected_beat -= (fposmod(selected_beat,beat_mods[beat_add_index])) 
+		
+		camera.position.y = Data.screen_size.y * selected_beat/beat_to_screen_mod +(Data.screen_size.y/beat_to_screen_mod)
+			
+		beat_pointer.position.y = (selected_beat + 1)/beat_to_screen_mod * Data.screen_size.y
+				
+		note_zoom_update()
+		
+		hold_note_grow_picker(true)
+	
+
+func beat_marker_zoom_update():
+	
+	"""
+	A function which will change the position of the
+	beat markers after the user has zoomed in or out of the
+	editor
+	"""
+	
+	# Loop through the beat marker list array which contains dictionaries
+	for beat_mark_data in beat_marker_list:
+		
+		# for each key in the dictionary in the array
+		for current_beat_mark in beat_mark_data:
+			
+			# The key is an beat mark sprite so we place it at a the screens distance multiplied by the 
+			# current beat we are on but divided by how much 
+#			current_beat_mark.position.y = Data.screen_size.y * (beat_mark_data[current_beat_mark])/beat_to_screen_mod \
+#		+ (Data.screen_size.y/beat_to_screen_mod)
+
+			current_beat_mark.position.y = beat_to_screen_length(beat_mark_data[current_beat_mark]-1) \
+		+ (Data.screen_size.y/beat_to_screen_mod)
+			
+			# If the current beat being zoomed is actually a bar
+			if beat_mark_data[current_beat_mark] % 4 == 0:
+				
+				# Check through the list of bar marker labels and place the label
+				# next to the corresponding bar
+				for bar_marker in bar_marker_list:
+					
+					# We divide by 4 because the beats of the bars will be in 4's
+					if int(bar_marker.text) == beat_mark_data[current_beat_mark]/4:
+						
+						bar_marker.rect_position.y = current_beat_mark.position.y
+
+########################################################
+# FUNCTIONS FOR ZOOMING IN AND OUT OF THE BEATMAP ((END))
+########################################################
+
+
+########################################################
+# FUNCTIONS FOR MOVING UP AND DOWN THE BEATMAP
+########################################################
+
+func beat_increment():
+	"""
+	A method meant to effectively progress through the beatmap chart by
+	increasing the current beat and moving the camera and beat pointer
+	accordingly.
+	"""
+	
+	# Add increment the selected beat by the current beat modifier 
+	selected_beat += beat_mods[beat_add_index]
+	
+	# Increment the camera's y position by the current beat multiplied
+	# by the beat_to_screen_mod scale variable and the size of the screen vertically
+	camera.position.y += (beat_mods[beat_add_index])/beat_to_screen_mod * Data.screen_size.y 
+	
+	beat_pointer.position.y = (selected_beat + 1)/beat_to_screen_mod * Data.screen_size.y
+	
+func beat_decrement():
+	"""
+	A complimentary method to beat_increment() which will instead decrement the current
+	beat and adjust the camera and beat pointer
+	"""
+	
+	# Decrement the current beat
+	selected_beat -= beat_mods[beat_add_index]
+	
+	# If the current beat is less than zero (user tried to decrement at 0)
+	if selected_beat < 0:
+		selected_beat = 0
+		
+	# Not decrementing on 0, adjust the camera and pointer
+	else:
+		camera.position.y -= (beat_mods[beat_add_index] )/beat_to_screen_mod * Data.screen_size.y 
+		
+		beat_pointer.position.y = (selected_beat + 1)/beat_to_screen_mod * Data.screen_size.y
+	
+
+func beat_snap():
+	"""
+	A method which will snap the camera and beat pointer to the nearest note whenever
+	a beat_mods option is changed
+	"""
+	
+	# This step is crucial as it will round the beats up or down
+	# to fit the current note timing we are on.
+	# For example, if we are on 8th notes (half beat)
+	# are on beat 2.5, and we want to switch to 
+	# a quarter note (whole beats), when we switch, 
+	# we'd need to subtract the selected beat by the remainder
+	# of the selected beat and the current timing mode to round it 
+	# to 2.
+	selected_beat -= (fposmod(selected_beat,beat_mods[beat_add_index])) 
+			
+	camera.position.y = Data.screen_size.y * (selected_beat +1)/beat_to_screen_mod
+	beat_pointer.position.y = (selected_beat + 1)/beat_to_screen_mod * Data.screen_size.y
+
+func next_beat_mod():
+	"""
+	A small method which will make the beat modifier smaller and more precise
+	as well as snapping the beats into place
+	"""
+	if beat_mods[beat_add_index] != beat_mods[-1]:
+			beat_add_index += 1
+			
+			beat_snap()
+
+func previous_beat_mod():
+	
+	if beat_add_index > 0:
+		
+			beat_add_index -= 1
+			
+			beat_snap()
+
+########################################################
+# FUNCTIONS FOR MOVING UP AND DOWN BEATMAP ((END))
+########################################################
+
+
+########################################################
+# FUNCTIONS FOR PLACING AND MANIPULATING NOTES
+########################################################
+
+func note_remove_checker(track):
+	"""A method that will check through the song data 
+	notes array and determine whether or not the note
+	the user has selected already exist. If it does, it will delete 
+	the note and return true, blocking the spawn_note_marker function from
+	spawning a new note there"""
+	
+	var curr_index = 0# Keep track of where we are in the array
+
+	for note in song_data["note data"]:
+		
+		# If the note the user has selected already exists i.e it has 
+		# identical properties to a note that exists in the song data dict
+		# remove it and return true 
+		if note["track"] == track and str(note["beat"]) == str(selected_beat):
+			note["editor instance"].queue_free()
+			song_data["note data"].remove(curr_index)
+			
+			return true
+			
+		curr_index += 1
+	
+	# Because the prior code will return true and break out of the function if 
+	# we delete a note, if we do not delete a tap note, we then check to see
+	# if we need to delete a hold note 
+	
+	if hold_note_remove_checker(track):
+		return true
+	
+	else:
+		return false
+		
+
+func spawn_note_marker(track):
+	"""A function which will take in a number for the corresponding 
+	track and spawn in a note in that place"""
+	
+	if not note_remove_checker(track):
+		var note_marker = Sprite.new()
+		
+		note_marker.texture = load("res://resources/note.png")
+		
+		# remove later and just make the note sprite smaller
+		note_marker.scale = Vector2(0.5,0.5)
+		
+		note_marker.position.y = Data.screen_size.y * selected_beat/beat_to_screen_mod \
+		+ (Data.screen_size.y/beat_to_screen_mod)
+		
+		
+		
+		# Depending on which track we are on, place arrange the notes in various
+		# horizontal places
+		match track:
+			
+			1:
+				note_marker.position.x = Data.screen_center.x - bar_line_rect.size.y/2
+			
+			2:
+				note_marker.position.x = Data.screen_center.x - bar_line_rect.size.y/6
+				
+			3:
+				note_marker.position.x = Data.screen_center.x + bar_line_rect.size.y/6
+				
+			4:
+				note_marker.position.x = Data.screen_center.x + bar_line_rect.size.y/2
+		
+		# Update the song data dictionary 
+		song_data["note data"].append({
+			"beat":selected_beat,
+			"track":track,
+			"editor instance": note_marker,
+		})
+		
+		
+		add_child(note_marker)
+		
+	
+func hold_note_remove_checker(track):
+	"""
+	A method which is used to remove any hold notes whenever the user
+	spawns in a note in between the hold note
+	"""
+	
+	for hold_note in song_data["hold note data"]:
+		if hold_note["track"] == track:
+			
+		# if the selected beat is somwhere in between a hold note
+			if hold_note["start beat"] <= selected_beat and selected_beat <= hold_note["end beat"]:
+				
+				hold_note["editor instance"].queue_free()
+				song_data["hold note data"].erase(hold_note)
+				return true
+				
+	return false
+
+	
+func start_note_remove_checker(track):
+	"""
+	A function which will remove any tap notes that collide with 
+	a hold note as soon as its created
+	"""
+	
+	for note in song_data["note data"]:
+		
+		if note["track"] == track:
+			
+			if note["beat"] == selected_beat:
+				
+				note["editor instance"].queue_free()
+				song_data["note data"].erase(note)
+
+func spawn_hold_note_marker(track):
+	
+	"""
+	A method that spawns in a hold note 
+	and adds its information to the song data dictionary
+	
+	"""
+	
+	# This means that in the specified track, we are creating a hold note
+	# This is used to stop the user from spawning tap notes at the same time
+	# as hold notes
+	hold_note_remove_checker(track)
+	
+	var hold_note_sprite = Sprite.new()
+	hold_note_sprite.texture = load("res://resources/hold_note.png")
+	hold_note_sprite.scale = Vector2(0.5,0.5)
+	
+	hold_note_sprite.position.y = Data.screen_size.y * selected_beat/beat_to_screen_mod \
+		+ (Data.screen_size.y/beat_to_screen_mod)
+		
+		
+		
+	# Depending on which track we are on, place arrange the notes in various
+	# horizontal places
+	match track:
+		
+		1:
+			hold_note_sprite.position.x = Data.screen_center.x - bar_line_rect.size.y/2
+		
+		2:
+			hold_note_sprite.position.x = Data.screen_center.x - bar_line_rect.size.y/6
+			
+		3:
+			hold_note_sprite.position.x = Data.screen_center.x + bar_line_rect.size.y/6
+			
+		4:
+			hold_note_sprite.position.x = Data.screen_center.x + bar_line_rect.size.y/2
+	
+	add_child(hold_note_sprite)
+	
+	
+	if not hold_note_activators[track]:
+		hold_note_activators[track] = true
+	
+		# Add all the data to the song list
+		song_data["hold note data"].append(
+			{
+				"start beat":selected_beat,
+				"track":track,
+				"end beat": selected_beat,
+				"is current": true,
+				"editor instance":hold_note_sprite,
+				
+			}
+		)
+	
+
+func hold_note_grow(hold_note,is_zoom):
+	"""
+	A function which will allow the hold notes to properly expand
+	to the selected beat
+	"""
+	
+	var start_pos = beat_to_screen_length(hold_note["start beat"])
+	
+	var end_beat
+	
+	if not is_zoom:
+		end_beat = selected_beat
+	else:
+		end_beat = hold_note["end beat"]
+	
+	sprite_grow(hold_note["editor instance"],start_pos,end_beat)
+	
+#	hold_note["editor instance"].position.y = start_pos
+#
+#	var diameter = hold_note["editor instance"].get_rect().size.y
+#
+#	var dist = abs(beat_to_screen_length(end_beat) - start_pos) + diameter/2
+#
+#	var scale_factor = dist/diameter
+#
+#	hold_note["editor instance"].scale.y  =scale_factor
+#
+#	hold_note["editor instance"].position.y += (hold_note["editor instance"].get_rect().size.y*scale_factor/2)\
+#	- (hold_note["editor instance"].get_rect().size.y/2)
+
+func sprite_grow(sprite,start_pos,end_pos):
+	"""
+	A function which will take a sprite and 
+	a start and end position and grow the sprite towards the target destination
+	"""
+	
+	sprite.position.y = start_pos
+	var diameter = sprite.get_rect().size.y
+	
+	var dist = abs(beat_to_screen_length(end_pos) - start_pos) + diameter/2
+	
+	var scale_factor = dist/diameter
+	
+	sprite.scale.y = scale_factor
+	
+	sprite.position.y += (sprite.get_rect().size.y*scale_factor/2)\
+	- (sprite.get_rect().size.y/2)
+
+		
+func hold_note_grow_picker(is_zoom=false):
+	"""
+	A function which will take in a condition and determine
+	whether to grow all the hold notes or just the ones begin edited.
+	This is to differentiate between regrowing all the hold notes when the screen is zoomed
+	and growing the hold notes that are currently being edited
+	"""
+	
+	for hold_note in song_data["hold note data"]:
+		
+		# If the screen currently isnt being zoomed then the only thing that 
+		# should be growing are current hold notes we are editing
+		if not is_zoom:
+			if hold_note["is current"]:
+				hold_note_grow(hold_note,is_zoom)
+		
+		# If the screen is being zoomed there are two conditions we need to cover
+		else:
+			
+			# If we are currently editing a note we need the notes final position
+			# to be the selected beat
+			if hold_note["is current"]:
+				hold_note_grow(hold_note,false)
+				
+			# If we aren't editing a note we need the note's final growth position
+			# to be its predefined end position
+			else:
+				 hold_note_grow(hold_note,is_zoom)
+			
+
+
+func hold_note_end(track):
+	"""
+	A method to finalize the position of the hold note
+	and make sure that it is no longer currently being edited
+	"""
+	
+	# This means that we are no longer creating a hold note and can 
+	# once again place other notes in that track
+	hold_note_activators[track] = false
+	
+	var curr_index = 0
+	
+	# Loop through all the hold notes
+	for hold_note_mark in song_data["hold note data"]:
+		
+		
+		# If the hold note in the current track is currently being modified
+		if hold_note_mark["is current"]:
+			
+			
+			# compare tracks make the end beat the selected beat
+			if hold_note_mark["track"] == track:
+				
+				# set this to false to that we dont end up changing the end position
+			# of all the hold notes in this track
+				hold_note_mark["is current"] = false
+				
+				if selected_beat == hold_note_mark["start beat"]:
+					
+					hold_note_mark["editor instance"].queue_free()
+					song_data["hold note data"].erase(hold_note_mark)
+					
+				else:
+					
+					hold_note_mark["end beat"] = selected_beat
+					hold_note_overlap_remove()
+
+
+func note_decision_maker(track):
+	"""
+	A function which will take in a track and determine the behavior
+	of the note 
+	"""
+	
+	# If the user is holding shift and presses a button to place a note
+	# and they arent already editing a hold note
+	if hold_note_mode:
+		
+		if not hold_note_activators[track]:
+			
+			# Check to see if we placed a hold note directly on a preexisting tap note
+			start_note_remove_checker(track)
+			
+			spawn_hold_note_marker(track)
+			
+	else:
+			
+			# If the hold note in the first track is already
+			if hold_note_activators[track]:
+				
+				hold_note_end(track)
+					
+			else:
+				
+				spawn_note_marker(track)
+	
+func note_place():
+	"""A function that will be used to place the notes in the 
+	four respective tracks using the 1,2,3 and 4 keys
+	NW: 1
+	SW: 2
+	NE: 3
+	SE: 4
+	"""
+	
+	if Input.is_action_just_pressed("nw_note_place"):
+		
+		
+		# Keep this commented in case shit hits the fan
+		
+#		if hold_note_mode:
+#			if not hold_note_activators[1]:
+#				spawn_hold_note_marker(1)
+#
+#		else:
+#
+#			# If the hold note in the first track is already
+#			if hold_note_activators[1]:
+#
+#				hold_note_end(1)
+#
+#			else:
+#
+#				spawn_note_marker(1)
+
+		 note_decision_maker(1)
+	
+	if Input.is_action_just_pressed("sw_note_place"):
+		
+		note_decision_maker(2)
+	
+	if Input.is_action_just_pressed("ne_note_place"):
+		
+		note_decision_maker(3)
+	
+	if Input.is_action_just_pressed("se_note_place"):
+		
+		note_decision_maker(4)
+
+
+func clearall():
+	"""
+	A method which will first check to see if a hold note is being created, 
+	"""
+	
+	var skip = false# A boolean to determine whether we should delete everything
+	
+	# This will check all the hold notes to determine if one of them is currently being
+	# created, if so, set skip to true
+	for hold_note in song_data["hold note data"]:
+		if hold_note["is current"]:
+			skip = true
+	
+	# If we are not creating a hold note, delete all the notes 
+	if not skip:
+		
+		
+		for note_container in song_data["note data"]:
+			note_container["editor instance"].queue_free()
+			
+		song_data["note data"].clear()
+		
+		for hold_note_container in song_data["hold note data"]:
+			hold_note_container["editor instance"].queue_free()
+		
+		song_data["hold note data"].clear()
+
+########################################################
+# FUNCTIONS FOR PLACING AND MANIPULATING NOTES ((END))
+########################################################			
+
+
+##############################
+# METHODS FOR SETTING UP THE LEVEL EDITOR
+##############################
+
+func beat_marker_place(total_beats):
+	"""A function to place all the beat markers
+	on the level editor screen by looping through
+	each beat in the list and placing it 1/16th of the 
+	way down the screen multiplied by itself and the screen size"""
+	
+	for beat in range(total_beats):
+		
+		var beat_mark_instance = beat_marker.instance()
+		
+		add_child(beat_mark_instance)
+		
+		beat_marker_list.append({beat_mark_instance:beat})
+		# For every fourth beat, make it longer and thicker so it can be 
+		# easily differentiated as a bar
+		
+		
+		beat_mark_instance.position.x = Data.screen_center.x
+		beat_mark_instance.position.y = Data.screen_size.y * beat/beat_to_screen_mod #\
+#		+ (Data.screen_size.y/beat_to_screen_mod)
+		
+		if beat % 4 == 0:
+			
+			# Scale the bar line so it looks different from the other beats 
+			#beat_mark_instance.scale.y *= 1.1
+			beat_mark_instance.scale.x *= 6
+			
+			# On the first beat, store the dimensions of a single bar
+			# so we can horizontally place the beat pointer there
+			if beat == 0:
+				bar_line_rect = beat_mark_instance.get_rect()
+				
+				# This complicated line of cryptic garbage will move the 
+				# beat pointer horizontally such that it will always be 
+				# positioned relative to the first bar in the chart,
+				# taking into account the size of the bar and the size
+				# of the arrow
+				beat_pointer.position.x = beat_mark_instance.position.x\
+				- (beat_mark_instance.get_rect().size.y/2) - beat_pointer.get_rect().size.x*1.1
+			
+			# Create a new label positioned next to the bar and update the 
+			# current bar number
+			var bar_marker = Label.new()
+			
+			bar_marker.rect_position.y = beat_mark_instance.position.y -10
+			
+			bar_marker.rect_position.x = beat_mark_instance.position.x + \
+			abs(beat_mark_instance.get_rect().size.y)/2 + 30
+
+			bar_marker.text = str(bar_marker_num)
+			
+			bar_marker_list.append(bar_marker) # Add the label to a list so it can be updated during zoom
+			bar_marker_num += 1
+			
+			add_child(bar_marker)
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	# incredibly shitty temporary solution to the camera snapping way too 
+	# high when the user switches beat types for the first time
+	camera.position.y = Data.screen_size.y * (selected_beat +1)/beat_to_screen_mod
+	
+	# Load the song from the given path
+	var song_stream = load(Data.current_song_path)
+	audio_player.stream = song_stream
+	
+	# Update the song databank with audio info
+	song_data["song stream"] = song_stream
+	song_data["song time"] = song_stream.get_length()
+	
+	var beats_per_second = song_data["bpm"]/60.0
+	
+	# Calculate the total beats in the song, this will be used to 
+	# determine the length the beat map area which can be edited
+	total_beats = ceil(beats_per_second * song_data["song time"])
+	
+	beat_marker_place(total_beats)
+	beat_marker_zoom_update()
+	# place the beat pointer somewhere for now i dont care
+	beat_pointer.position.y = Data.screen_size.y/beat_to_screen_mod * (selected_beat+1)
+	
+	
+func _process(delta):
+	
+	# Call the function to allow the user to continuously move the camera
+	#beatmap_navigate()
+	master_input_detect()
+	
+	# Debug text 
+	$BeatMode.text = "beat mod: " + str(beat_mods[beat_add_index])
+	$BeatMode.rect_position.x = Data.screen_size.x/4
+	$BeatMode.rect_position.y = camera.position.y
+	
+	$CurrBeat.text = "curr beat: " + str(selected_beat)
+	$CurrBeat.rect_position.x = Data.screen_size.x/4
+	$CurrBeat.rect_position.y = camera.position.y + 60

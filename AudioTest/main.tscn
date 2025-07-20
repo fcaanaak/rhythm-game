@@ -1,0 +1,51 @@
+[gd_scene load_steps=10 format=3 uid="uid://cvannhsbgmf5x"]
+
+[ext_resource type="Script" uid="uid://buoa1p5jwtkel" path="res://main.gd" id="1"]
+[ext_resource type="AudioStream" uid="uid://cm58pgs2a2p0x" path="res://resources/sakura_mankai.mp3" id="2"]
+[ext_resource type="PackedScene" path="res://Note.tscn" id="3"]
+[ext_resource type="Texture2D" uid="uid://3mvh2y64gigw" path="res://icon.png" id="4"]
+[ext_resource type="PackedScene" path="res://NoteGoal.tscn" id="5"]
+[ext_resource type="Script" uid="uid://d1ithjwm5eut7" path="res://cam.gd" id="6"]
+[ext_resource type="Texture2D" uid="uid://bwlplybwdvkiy" path="res://resources/bar.png" id="7"]
+[ext_resource type="Script" uid="uid://bg3jecbar2hso" path="res://Bar.gd" id="8"]
+[ext_resource type="PackedScene" uid="uid://xhvl5nmfyp3x" path="res://HoldNote.tscn" id="11"]
+
+[node name="main" type="Node2D"]
+script = ExtResource("1")
+note = ExtResource("3")
+hold_note = ExtResource("11")
+note_goal = ExtResource("5")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2")
+volume_db = -0.315
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(2.39063, 2.73436)
+ignore_rotation = false
+rotatingforCamera2Dcurrent = true
+script = ExtResource("6")
+
+[node name="Tween" type="Tween" parent="."]
+
+[node name="Note" parent="." instance=ExtResource("3")]
+position = Vector2(-465, -4)
+scale = Vector2(1.42188, 1.29688)
+
+[node name="Bar" type="Sprite2D" parent="."]
+position = Vector2(-276, 2)
+scale = Vector2(0.1, 4)
+texture = ExtResource("7")
+script = ExtResource("8")
+
+[node name="PosTester" type="Sprite2D" parent="."]
+position = Vector2(598, -76)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("4")
+
+[node name="HoldNote" parent="." instance=ExtResource("11")]
+position = Vector2(598, -76)
+
+[node name="NoteGoal" parent="." instance=ExtResource("5")]
+
+[connection signal="tween_completed" from="Tween" to="." method="_on_Tween_tween_completed"]

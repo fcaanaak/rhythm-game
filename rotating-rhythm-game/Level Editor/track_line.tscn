@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://cblimay4064r3"]
+
+[ext_resource type="Script" uid="uid://d1bjfv8op88fa" path="res://Level Editor/track_line.gd" id="1_dbxxn"]
+
+[node name="TrackLine" type="Line2D"]
+position = Vector2(2, 10)
+points = PackedVector2Array(0, 0, 0, 0)
+width = 5.0
+script = ExtResource("1_dbxxn")
+metadata/is_bar = false

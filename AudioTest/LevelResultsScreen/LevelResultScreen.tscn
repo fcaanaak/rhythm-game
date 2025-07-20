@@ -1,0 +1,45 @@
+[gd_scene load_steps=4 format=3 uid="uid://5kxaey7rulof"]
+
+[ext_resource type="FontFile" path="res://resources/fonts/test_font.tres" id="1"]
+[ext_resource type="Script" uid="uid://cypo2uxbw8io0" path="res://LevelResultsScreen/LevelResultScreen.gd" id="2"]
+[ext_resource type="PackedScene" path="res://TransitionScene/TransitionScreen.tscn" id="3"]
+
+[node name="LevelResults" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 3.0
+offset_bottom = 3.0
+script = ExtResource("2")
+
+[node name="LevelSelect" type="Button" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -137.0
+offset_top = 41.0
+offset_right = 138.0
+offset_bottom = 82.0
+theme_override_fonts/font = ExtResource("1")
+text = "Back to level Select"
+
+[node name="MainMenu" type="Button" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -135.0
+offset_top = -20.5
+offset_right = 135.0
+offset_bottom = 20.5
+theme_override_fonts/font = ExtResource("1")
+text = "Back to main menu"
+
+[node name="TransitionScreen" parent="." instance=ExtResource("3")]
+
+[node name="ScoreLabel" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 14.0
+
+[connection signal="pressed" from="LevelSelect" to="." method="_on_LevelSelect_pressed"]
+[connection signal="pressed" from="MainMenu" to="." method="_on_MainMenu_pressed"]

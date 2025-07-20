@@ -1,0 +1,44 @@
+[gd_scene load_steps=2 format=3 uid="uid://dk5p8msxt2eeo"]
+
+[ext_resource type="FontFile" path="res://resources/fonts/test_font.tres" id="2"]
+
+[node name="LevelEditorGuide" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+offset_left = 17.0
+offset_top = 15.0
+offset_right = 1917.0
+offset_bottom = 1085.0
+theme_override_fonts/normal_font = ExtResource("2")
+text = "The Level Editor Guide
+
+Track overview:
+
+The level editor is split into 4 sections or tracks, each track represents a different side the notes will come in on.
+The following are the directions in which the notes in each goal approach the goal.
+
+Track 1: Northwest | Track 2: Southwest | Track 3: Northeast | Track 4: Southwest
+
+Control Overview: 
+
+Controls for the level editor are displayed within the editor but they'll be outlined 
+here:
+
+General purpose controls:
+
+Pressing the up and down arrows will allow you to navigate up and down the level editor.
+
+Tap Note Controls:
+
+Pressing the number keys 1 through 4 will place a tap note in the respective track (e.g. pressing 2 will place a tap note in track 2)
+
+To delete a tap note simply place a tap note on a pre-existing one. 
+
+
+
+Hold Note Controls:
+
+
+"

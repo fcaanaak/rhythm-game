@@ -1,0 +1,83 @@
+[gd_scene load_steps=8 format=3 uid="uid://dqmki45hqh6b5"]
+
+[ext_resource type="Script" uid="uid://d24w5hf25loxo" path="res://GamePlayScreen/main.gd" id="1"]
+[ext_resource type="PackedScene" path="res://TransitionScene/TransitionScreen.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://GamePlayScreen/Note.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://GamePlayScreen/NoteGoal.tscn" id="5"]
+[ext_resource type="Script" uid="uid://cjuttugeake5r" path="res://MainMenu/gameplay_camera.gd" id="6"]
+[ext_resource type="FontFile" path="res://resources/fonts/test_font.tres" id="9"]
+[ext_resource type="PackedScene" uid="uid://c2hob5x6ffoo4" path="res://GamePlayScreen/HoldNote.tscn" id="11"]
+
+[node name="main" type="Node2D"]
+process_mode = 3
+script = ExtResource("1")
+note = ExtResource("3")
+hold_note = ExtResource("11")
+note_goal = ExtResource("5")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+process_mode = 1
+volume_db = -0.315
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(2.39063, 2.73436)
+ignore_rotation = false
+rotatingforCamera2Dcurrent = true
+script = ExtResource("6")
+
+[node name="Tween" type="Tween" parent="."]
+process_mode = 1
+
+[node name="Note" parent="." instance=ExtResource("3")]
+process_mode = 1
+position = Vector2(-465, -4)
+
+[node name="HoldNote" parent="." instance=ExtResource("11")]
+process_mode = 1
+position = Vector2(598, -76)
+
+[node name="NoteGoal" parent="." instance=ExtResource("5")]
+
+[node name="ScoreLabel" type="Label" parent="."]
+offset_left = 474.0
+offset_top = 241.0
+offset_right = 657.0
+offset_bottom = 315.0
+text = "aaaaaaa"
+
+[node name="PauseMenu" type="VBoxContainer" parent="."]
+process_mode = 3
+process_priority = -1
+visible = false
+offset_right = 215.0
+offset_bottom = 131.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="MenuButton" type="Button" parent="PauseMenu"]
+process_mode = 3
+offset_right = 215.0
+offset_bottom = 41.0
+theme_override_fonts/font = ExtResource("9")
+text = "Back to menu"
+
+[node name="ResumeButton" type="Button" parent="PauseMenu"]
+offset_top = 45.0
+offset_right = 215.0
+offset_bottom = 86.0
+theme_override_fonts/font = ExtResource("9")
+text = "Resume Game"
+
+[node name="RetryButton" type="Button" parent="PauseMenu"]
+offset_right = 12.0
+offset_bottom = 20.0
+theme_override_fonts/font = ExtResource("9")
+text = "Retry"
+
+[node name="TransitionScreen" parent="." instance=ExtResource("2")]
+
+[connection signal="tween_completed" from="Tween" to="." method="_on_Tween_tween_completed"]
+[connection signal="pressed" from="PauseMenu/MenuButton" to="." method="_on_MenuButton_pressed"]
+[connection signal="pressed" from="PauseMenu/ResumeButton" to="." method="_on_ResumeButton_pressed"]
+[connection signal="pressed" from="PauseMenu/RetryButton" to="." method="_on_RetryButton_pressed"]

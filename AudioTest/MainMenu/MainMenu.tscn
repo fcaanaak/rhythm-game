@@ -1,0 +1,48 @@
+[gd_scene load_steps=4 format=3 uid="uid://cavrkqtgls2pd"]
+
+[ext_resource type="FontFile" path="res://resources/fonts/test_font.tres" id="1"]
+[ext_resource type="Script" uid="uid://bb75pjqg2lbh1" path="res://MainMenu/MainMenu.gd" id="2"]
+[ext_resource type="PackedScene" path="res://TransitionScene/TransitionScreen.tscn" id="3"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1.0
+offset_bottom = -1.0
+script = ExtResource("2")
+
+[node name="PlayLevelButton" type="Button" parent="."]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -35.5
+offset_top = -251.0
+offset_right = 35.5
+offset_bottom = -210.0
+focus_neighbor_top = NodePath("../LevelEditorButton")
+theme_override_fonts/font = ExtResource("1")
+text = "Play"
+
+[node name="LevelEditorButton" type="Button" parent="."]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -86.0
+offset_top = -20.5
+offset_right = 86.0
+offset_bottom = 20.5
+focus_neighbor_bottom = NodePath("../PlayLevelButton")
+theme_override_fonts/font = ExtResource("1")
+text = "Level Editor"
+
+[node name="TransitionScreen" parent="." instance=ExtResource("3")]
+visible = false
+
+[connection signal="pressed" from="PlayLevelButton" to="." method="_on_PlayLevelButton_pressed"]
+[connection signal="pressed" from="LevelEditorButton" to="." method="_on_LevelEditorButton_pressed"]

@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://cht3q6m3xfu7r"]
+
+[ext_resource type="Texture2D" uid="uid://cpqe2vc10s0bw" path="res://resources/images/bar.png" id="1"]
+[ext_resource type="Script" uid="uid://crbx60q61xl7k" path="res://LevelEditor/BeatMarker.gd" id="2"]
+
+[node name="BeatMarker" type="Sprite2D"]
+position = Vector2(494, 237)
+rotation = 1.5708
+scale = Vector2(0.01, 1)
+texture = ExtResource("1")
+script = ExtResource("2")

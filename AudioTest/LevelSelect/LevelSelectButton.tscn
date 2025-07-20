@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://ckfe3i6p7fg5a"]
+
+[ext_resource type="Texture2D" uid="uid://prxuc1aana5f" path="res://resources/images/level_select_button.png" id="1"]
+[ext_resource type="Script" uid="uid://bvlh3yyj0erfg" path="res://LevelSelect/LevelSelectButton.gd" id="2"]
+
+[node name="LevelSelectButton" type="Sprite2D"]
+texture = ExtResource("1")
+script = ExtResource("2")

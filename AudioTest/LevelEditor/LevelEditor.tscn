@@ -1,0 +1,89 @@
+[gd_scene load_steps=8 format=3 uid="uid://c0naa43a8erc3"]
+
+[ext_resource type="Script" uid="uid://bghwod3v4p7el" path="res://LevelEditor/LevelEditor.gd" id="1"]
+[ext_resource type="Script" uid="uid://6h7v0vihit5n" path="res://LevelEditor/LevelScrollCamera.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://cht3q6m3xfu7r" path="res://LevelEditor/BeatMarker.tscn" id="3"]
+[ext_resource type="Texture2D" uid="uid://1hm8b8pev1li" path="res://resources/images/beat_pointer.png" id="4"]
+[ext_resource type="FontFile" path="res://resources/fonts/test_font.tres" id="5"]
+[ext_resource type="PackedScene" path="res://TransitionScene/TransitionScreen.tscn" id="6"]
+[ext_resource type="FontFile" path="res://resources/fonts/new_dynamicfont.tres" id="7"]
+
+[node name="LevelEditor" type="Node2D"]
+script = ExtResource("1")
+beat_marker = ExtResource("3")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="LevelScrollCamera" type="Camera2D" parent="."]
+script = ExtResource("2")
+
+[node name="LevelInfo" type="Label" parent="."]
+offset_left = -92.0
+offset_top = -201.0
+offset_right = -52.0
+offset_bottom = -187.0
+theme_override_fonts/font = ExtResource("7")
+
+[node name="BeatPointer" type="Sprite2D" parent="."]
+texture = ExtResource("4")
+
+[node name="Tween" type="Tween" parent="."]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+editor_description = ""
+script = null
+
+[node name="TransitionScreen" parent="." instance=ExtResource("6")]
+
+[node name="ExitText" type="RichTextLabel" parent="."]
+visible = false
+offset_left = -802.0
+offset_top = -380.0
+offset_right = -610.0
+offset_bottom = -283.0
+theme_override_colors/default_color = Color(1, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(1, 0.52549, 0, 1)
+theme_override_fonts/normal_font = ExtResource("5")
+bbcode_enabled = true
+text = "Exiting"
+
+[node name="ControlInfo" type="RichTextLabel" parent="."]
+offset_left = -802.0
+offset_top = -380.0
+offset_right = -267.0
+offset_bottom = 180.0
+theme_override_fonts/normal_font = ExtResource("7")
+bbcode_enabled = true
+text = "
+Controls:
+Place tap notes: (1-4)
+Create hold note: shift+(1-4)
+Expand hold note: up/down arrow while creating hold note
+Finalize hold note: (1-4) while creating hold note
+
+Navigate: up/down arrow
+Snap up or down (if not on note): tab+(up/down) arrow
+
+Beat mode up (more precise): right arrow
+Beat mode down (less precise): left arrow
+
+Expand editor: ctrl+down arrow
+Shrink editor: ctrl+up arrow
+
+Exit editor: esc (hold)
+Save level: ctrl+s
+Preview level: p
+Delete all notes:  ctrl+x"
+
+[node name="SaveText" type="RichTextLabel" parent="."]
+offset_left = -140.0
+offset_top = -255.0
+offset_right = 131.0
+offset_bottom = -164.0
+theme_override_fonts/normal_font = ExtResource("7")
+bbcode_enabled = true
+text = "Level Saved"

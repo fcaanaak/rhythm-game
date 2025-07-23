@@ -2,9 +2,8 @@ extends Node2D
 
 # TODO: 
 # - Comment all the code so far
+# - Add camera zooming (Look at old code for implementation details
 # - Add automatic camera snapping to the nearest beat when we change zoom options (look in old code)
-# - Make it so the camera doesn't move when on the first beat and we press down. This is so the beat
-# arrow always has track lines above and below it
 # - General refactoring
 
 ##############################
@@ -56,11 +55,16 @@ var manager_instance
 signal camera_moved(distance,max_boundary)
 signal lines_redrawn(new_beat:float,bar_lines:int)
 signal jump_to_beat(beat:float) # For CurrentBeatArrow node
-
+signal update_arrow(beat:float)
+signal update_camera(beat:float)
 
 ##############################
 # MAIN CODE BODY
 ##############################
+
+func beat_resolution_change_correction():
+	SongData.selected_beat -= fposmod(SongData.selected_beat, SongData.beat_resolution)
+
 
 func master_input_collect():
 	"""
@@ -75,16 +79,16 @@ func master_input_collect():
 	if(Input.is_action_just_pressed("ui_up")):
 		SongData.selected_beat = clamp(SongData.selected_beat - beat_mods[SongData.beat_res_index],0,100)
 		
-		current_beat_arrow.position.y = Globals.beat_to_pixels(SongData.selected_beat)
+		emit_signal("update_arrow",SongData.selected_beat)
+		emit_signal("update_camera",-SongData.beat_resolution)
 		
-		
-		emit_signal("camera_moved",-Globals.beat_to_pixels(beat_mods[SongData.beat_res_index]),TEST_MAX_HEIGHT)
 		
 	if(Input.is_action_just_pressed("ui_down")):
 		SongData.selected_beat = clamp(SongData.selected_beat + beat_mods[SongData.beat_res_index],0,100)
 		
-		current_beat_arrow.position.y = Globals.beat_to_pixels(SongData.selected_beat)
-		emit_signal("camera_moved",Globals.beat_to_pixels(beat_mods[SongData.beat_res_index]),TEST_MAX_HEIGHT)
+		emit_signal("update_arrow",SongData.selected_beat)
+		emit_signal("update_camera",SongData.beat_resolution)
+		
 		
 	# Pressing left or right will decrease or increase the beat resolution 
 	# allowing you to more precisely place notes on the screen
@@ -94,13 +98,14 @@ func master_input_collect():
 		SongData.beat_res_index = clamp(SongData.beat_res_index-1,0,beat_mods.size()-1)
 		SongData.beat_resolution = beat_mods[SongData.beat_res_index]
 		
-		if (old_idx != SongData.beat_res_index):
+		if (old_idx != SongData.beat_res_index):# Only redraw if we have changed to a unique index
 			emit_signal("lines_redrawn",SongData.beat_resolution,100)
-			SongData.selected_beat -= (fposmod(SongData.selected_beat,beat_mods[beat_add_index]))
-			level_cam.position.y = Globals.screen_dimensions.y * (SongData.selected_beat +1)/SongData.beats_per_screen
+			
+			beat_resolution_change_correction()
 			
 			current_beat_arrow.position.y = Globals.beat_to_pixels(SongData.selected_beat)
-			emit_signal("camera_moved",Globals.beat_to_pixels(beat_mods[SongData.beat_res_index]),TEST_MAX_HEIGHT)
+			level_cam.position.y = Globals.beat_to_pixels(SongData.selected_beat)
+			#emit_signal("camera_moved",Globals.beat_to_pixels(beat_mods[SongData.beat_res_index]),TEST_MAX_HEIGHT)
 			
 			
 		
@@ -111,22 +116,23 @@ func master_input_collect():
 		SongData.beat_resolution = beat_mods[SongData.beat_res_index]
 		
 		if (old_idx != SongData.beat_res_index):
-			print(SongData.selected_beat)
 			emit_signal("lines_redrawn",SongData.beat_resolution ,100)
-			emit_signal("jump_to_beat",SongData.selected_beat)
 			
-			#emit_signal("camera_moved",Globals.beat_to_pixels(beat_mods[SongData.beat_res_index]),TEST_MAX_HEIGHT)
-		
-		
+			beat_resolution_change_correction()
+
+			current_beat_arrow.position.y = Globals.beat_to_pixels(SongData.selected_beat)
+			level_cam.position.y = Globals.beat_to_pixels(SongData.selected_beat)
+			
+				
 func _ready():
 	
 	# Instantiate the track line manager which 
 	# manages all the lines displayed on the level editor screen
 	manager_instance = manager_preload.instantiate()
 	add_child(manager_instance)
-	manager_instance.display_lines(Globals.screen_dimensions.y/SongData.beats_per_screen,100)
 	
-	current_beat_arrow.position.x = 100
+	# 100 is just a placeholder value for now
+	manager_instance.display_lines(Globals.screen_dimensions.y/SongData.beats_per_screen,100)
 
 
 func _process(delta):

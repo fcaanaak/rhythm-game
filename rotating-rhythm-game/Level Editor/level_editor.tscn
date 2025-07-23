@@ -24,6 +24,6 @@ texture = ExtResource("5_w71re")
 script = ExtResource("6_7uh1r")
 
 [connection signal="camera_moved" from="." to="LevelCam" method="_on_level_editor_camera_moved"]
-[connection signal="jump_to_beat" from="." to="LevelCam" method="_on_level_editor_jump_to_beat"]
-[connection signal="jump_to_beat" from="." to="CurrentBeatArrow" method="_on_level_editor_jump_to_beat"]
 [connection signal="lines_redrawn" from="." to="TrackLineManager" method="_on_level_editor_lines_redrawn"]
+[connection signal="update_arrow" from="." to="CurrentBeatArrow" method="_on_level_editor_update_arrow"]
+[connection signal="update_camera" from="." to="LevelCam" method="_on_level_editor_update_camera"]

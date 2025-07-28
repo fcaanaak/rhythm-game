@@ -17,8 +17,14 @@ func _ready():
 # Signal Handlers
 ##############################
 
-func _on_level_editor_update_camera(beat: float) -> void:
+func _on_level_editor_increment_camera(beat: float, maximum_beat: float) -> void:
 	
 	var beat_distance = Globals.beat_to_pixels(beat)
+	var max_distance = Globals.beat_to_pixels(maximum_beat)
 	
-	position.y = clamp(position.y + beat_distance,minimum_beat_offset,MAX_PLACEHOLDER)
+	position.y = clamp(position.y + beat_distance,minimum_beat_offset,max_distance)
+
+
+func _on_level_editor_update_camera(beat: float) -> void:
+	
+	position.y = Globals.beat_to_pixels(beat)

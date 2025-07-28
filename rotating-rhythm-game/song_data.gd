@@ -7,4 +7,6 @@ var zoom_mod_index = 0
 var selected_beat = 0.0
 var max_beat = 255.0
 
-enum CameraDirections {UP=-1,DOWN=1}
+enum Directions{
+	UP=1,DOWN=-1
+}

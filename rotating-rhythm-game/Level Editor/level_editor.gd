@@ -1,7 +1,7 @@
 extends Node2D
 
 # TODO: 
-# - Make it so the zoom mod index only goes as high as the beat resolution index
+# - Check to see if we need to clamp the zoom when increasing the resolution (i dont think so but just think about it)
 # - Look for bugs regarding zooming and changing resolution
 # - General refactoring
 
@@ -62,8 +62,13 @@ signal camera_moved(distance,max_boundary)
 signal lines_redrawn(new_beat:float,bar_lines:int)
 signal update_arrow(beat:float)
 signal update_camera(beat:float, maximum_beat:float)
-signal update_zoom(direction:Directions)
+signal increment_zoom(direction:Directions,max_index:int)
+signal clamp_zoom(max_index:int)
 signal increment_camera(beat:float)
+
+##############################
+# SIGNAL NAMES
+##############################
 
 var max_beats = PLACEHOLDER_LEVEL_DATA["bpm"]/SECS_PER_MINUTE*PLACEHOLDER_LEVEL_DATA["length"]
 
@@ -89,7 +94,7 @@ func master_input_collect():
 		
 		if (Input.is_action_pressed("zoom_enable")):
 			
-			emit_signal("update_zoom",SongData.Directions.UP)
+			emit_signal("increment_zoom",SongData.Directions.UP,SongData.beat_res_index)
 			emit_signal("lines_redrawn",SongData.beat_resolution*zoom_manager.zoom,max_beats/SongData.beat_resolution)
 			emit_signal("update_camera",SongData.selected_beat*zoom_manager.zoom)
 			
@@ -106,7 +111,7 @@ func master_input_collect():
 		
 		if (Input.is_action_pressed("zoom_enable")):
 			
-			emit_signal("update_zoom",SongData.Directions.DOWN)
+			emit_signal("increment_zoom",SongData.Directions.DOWN,SongData.beat_res_index)
 			
 			emit_signal("lines_redrawn",SongData.beat_resolution*zoom_manager.zoom,max_beats/SongData.beat_resolution)
 			emit_signal("update_camera",SongData.selected_beat*zoom_manager.zoom)
@@ -128,8 +133,8 @@ func master_input_collect():
 		SongData.beat_resolution = beat_mods[SongData.beat_res_index]
 		
 		if (old_idx != SongData.beat_res_index):# Only redraw if we have changed to a unique index
+			emit_signal("clamp_zoom",SongData.beat_res_index)
 			emit_signal("lines_redrawn",SongData.beat_resolution,max_beats/SongData.beat_resolution)
-			
 			
 			beat_resolution_change_correction()
 			
@@ -147,7 +152,7 @@ func master_input_collect():
 		
 		if (old_idx != SongData.beat_res_index):
 			emit_signal("lines_redrawn",SongData.beat_resolution ,max_beats/SongData.beat_resolution)
-
+			beat_resolution_change_correction()
 			current_beat_arrow.position.y = Globals.beat_to_pixels(SongData.selected_beat)
 			level_cam.position.y = Globals.beat_to_pixels(SongData.selected_beat)
 			

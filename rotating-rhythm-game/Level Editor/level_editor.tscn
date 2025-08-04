@@ -28,8 +28,9 @@ script = ExtResource("6_7uh1r")
 script = ExtResource("7_ud76q")
 
 [connection signal="camera_moved" from="." to="LevelCam" method="_on_level_editor_camera_moved"]
+[connection signal="clamp_zoom" from="." to="ZoomManager" method="_on_level_editor_clamp_zoom"]
 [connection signal="increment_camera" from="." to="LevelCam" method="_on_level_editor_increment_camera"]
+[connection signal="increment_zoom" from="." to="ZoomManager" method="_on_level_editor_increment_zoom"]
 [connection signal="lines_redrawn" from="." to="TrackLineManager" method="_on_level_editor_lines_redrawn"]
 [connection signal="update_arrow" from="." to="CurrentBeatArrow" method="_on_level_editor_update_arrow"]
 [connection signal="update_camera" from="." to="LevelCam" method="_on_level_editor_update_camera"]
-[connection signal="update_zoom" from="." to="ZoomManager" method="_on_level_editor_update_zoom"]

@@ -20,6 +20,10 @@ config/icon="res://icon.svg"
 Globals="*res://globals.gd"
 SongData="*res://song_data.gd"
 
+[dotnet]
+
+project/assembly_name="Rotating Rhythm Game"
+
 [input]
 
 zoom_enable={

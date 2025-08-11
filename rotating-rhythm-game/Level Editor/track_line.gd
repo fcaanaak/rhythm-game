@@ -1,6 +1,6 @@
 class_name TrackLine extends Line2D
 
-const WIDTH_BAR = 5
+const WIDTH_BAR = 10
 const WIDTH_LINE = 2
 
 const LEFT_POINT_INDEX = 0

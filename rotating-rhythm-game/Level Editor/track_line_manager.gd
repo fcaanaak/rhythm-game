@@ -1,13 +1,12 @@
 extends Node2D
 
-var track_lines:Array = Array()
 
-func display_lines(spacing:int,line_num:int)->void:
+func display_lines(spacing:int,number_of_lines:int)->void:
 	
 	var new_line
 	
-	for i in range(0,line_num):
-		new_line = TrackLine.new(spacing*i,i%int(4/SongData.beats_per_screen)==0)
+	for current_line_number in range(number_of_lines):
+		new_line = TrackLine.new(spacing*current_line_number,current_line_number%int(4.0/SongData.beat_resolution)==0)
 		add_child(new_line)
 	
 	

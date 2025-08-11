@@ -1,7 +1,9 @@
 extends Node2D
 
 # TODO: 
-# - Check to see if we need to clamp the zoom when increasing the resolution (i dont think so but just think about it)
+# - Refactor the master input function so that there is no repeating code and instead the code gets
+# put into various functions what change depending on a Directions parameter
+# - Create a LevelEditorDebug components that will simply display various key data values
 # - Look for bugs regarding zooming and changing resolution
 # - General refactoring
 
@@ -47,13 +49,10 @@ var beat_add_index = 0
 var manager_preload = preload("res://Level Editor/TrackLineManager.tscn")
 var manager_instance
 
-enum Directions { 
-	UP, DOWN
-}
-
 @onready var level_cam = $LevelCam
 @onready var current_beat_arrow = $CurrentBeatArrow
 @onready var zoom_manager = $ZoomManager
+@onready var directions = $Directions
 ##############################
 # SIGNALS
 ##############################
@@ -80,6 +79,13 @@ func beat_resolution_change_correction():
 	SongData.selected_beat -= fposmod(SongData.selected_beat, SongData.beat_resolution*zoom_manager.zoom)
 
 
+func handle_zoom(direction:Directions):
+	pass
+	
+func level_editor_move(direction:Directions):
+	pass
+	
+	
 func master_input_collect():
 	"""
 	Collect and process all inputs
@@ -94,7 +100,7 @@ func master_input_collect():
 		
 		if (Input.is_action_pressed("zoom_enable")):
 			
-			emit_signal("increment_zoom",SongData.Directions.UP,SongData.beat_res_index)
+			emit_signal("increment_zoom",Directions.UP,SongData.beat_res_index)
 			emit_signal("lines_redrawn",SongData.beat_resolution*zoom_manager.zoom,max_beats/SongData.beat_resolution)
 			emit_signal("update_camera",SongData.selected_beat*zoom_manager.zoom)
 			
@@ -111,7 +117,7 @@ func master_input_collect():
 		
 		if (Input.is_action_pressed("zoom_enable")):
 			
-			emit_signal("increment_zoom",SongData.Directions.DOWN,SongData.beat_res_index)
+			emit_signal("increment_zoom",Directions.DOWN,SongData.beat_res_index)
 			
 			emit_signal("lines_redrawn",SongData.beat_resolution*zoom_manager.zoom,max_beats/SongData.beat_resolution)
 			emit_signal("update_camera",SongData.selected_beat*zoom_manager.zoom)
@@ -151,6 +157,7 @@ func master_input_collect():
 		SongData.beat_resolution = beat_mods[SongData.beat_res_index]
 		
 		if (old_idx != SongData.beat_res_index):
+			emit_signal("clamp_zoom",SongData.beat_res_index)
 			emit_signal("lines_redrawn",SongData.beat_resolution ,max_beats/SongData.beat_resolution)
 			beat_resolution_change_correction()
 			current_beat_arrow.position.y = Globals.beat_to_pixels(SongData.selected_beat)

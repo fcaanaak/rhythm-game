@@ -30,7 +30,6 @@ script = ExtResource("7_ud76q")
 
 [node name="DebugBox" parent="." instance=ExtResource("8_oceel")]
 
-[connection signal="camera_moved" from="." to="LevelCam" method="_on_level_editor_camera_moved"]
 [connection signal="clamp_zoom" from="." to="ZoomManager" method="_on_level_editor_clamp_zoom"]
 [connection signal="increment_camera" from="." to="LevelCam" method="_on_level_editor_increment_camera"]
 [connection signal="increment_zoom" from="." to="ZoomManager" method="_on_level_editor_increment_zoom"]

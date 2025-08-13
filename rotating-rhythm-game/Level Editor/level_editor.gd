@@ -52,13 +52,19 @@ var manager_instance
 # SIGNALS
 ##############################
 
-signal camera_moved(distance,max_boundary)
+# Track line signal(s)
 signal lines_redrawn(new_beat:float,bar_lines:int)
+
+# Beat arrow signal(s)
 signal update_arrow(beat:float)
+
+# Camera signals
 signal update_camera(beat:float, maximum_beat:float)
+signal increment_camera(beat:float)
+
+# Zoom signals
 signal increment_zoom(direction,max_index:int)
 signal clamp_zoom(max_index:int)
-signal increment_camera(beat:float)
 
 # put this here for now idfk
 var max_beats = PLACEHOLDER_LEVEL_DATA["bpm"]/SECS_PER_MINUTE*PLACEHOLDER_LEVEL_DATA["length"]

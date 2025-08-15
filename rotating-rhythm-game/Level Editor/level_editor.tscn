@@ -36,3 +36,4 @@ script = ExtResource("7_ud76q")
 [connection signal="lines_redrawn" from="." to="TrackLineManager" method="_on_level_editor_lines_redrawn"]
 [connection signal="update_arrow" from="." to="CurrentBeatArrow" method="_on_level_editor_update_arrow"]
 [connection signal="update_camera" from="." to="LevelCam" method="_on_level_editor_update_camera"]
+[connection signal="update_debug_box" from="." to="DebugBox" method="_on_level_editor_update_debug_box"]

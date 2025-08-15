@@ -1,7 +1,5 @@
 extends Node2D
 
-
-
 ##############################
 # CONSTANTS
 ##############################
@@ -66,6 +64,9 @@ signal increment_camera(beat:float)
 signal increment_zoom(direction,max_index:int)
 signal clamp_zoom(max_index:int)
 
+# Debug box signals
+signal update_debug_box(zoom_index:int, zoom_value:int)
+
 # put this here for now idfk
 var max_beats = PLACEHOLDER_LEVEL_DATA["bpm"]/SECS_PER_MINUTE*PLACEHOLDER_LEVEL_DATA["length"]
 
@@ -86,12 +87,14 @@ func handle_zoom(direction:int)->void:
 	emit_signal("increment_zoom",direction,SongData.beat_res_index)
 	emit_signal("lines_redrawn",SongData.beat_resolution*zoom_manager.zoom,max_beats/SongData.beat_resolution)
 	emit_signal("update_camera",SongData.selected_beat*zoom_manager.zoom)
+	emit_signal("update_debug_box",zoom_manager.zoom_multipliers_index,zoom_manager.zoom)
 	
 func level_chart_increment(direction)->void:
 	"""Handle behavior when we move up or down the level chart"""
 	SongData.selected_beat = clamp(SongData.selected_beat + direction*beat_mods[SongData.beat_res_index],0,max_beats)
 	emit_signal("increment_camera",direction*SongData.beat_resolution*zoom_manager.zoom,max_beats)
-
+	emit_signal("update_debug_box",zoom_manager.zoom_multipliers_index,zoom_manager.zoom)
+	
 func beat_resolution_update()->void:
 	"""Update various nodes following a beat resolution change"""
 	
@@ -100,9 +103,9 @@ func beat_resolution_update()->void:
 	
 	beat_resolution_change_correction()
 	
-	emit_signal("update_arrow",SongData.selected_beat)
+	emit_signal("update_arrow",SongData.selected_beat*zoom_manager.zoom)
 	emit_signal("update_camera",SongData.selected_beat)
-	
+	emit_signal("update_debug_box",zoom_manager.zoom_multipliers_index,zoom_manager.zoom)
 		
 func beat_resolution_change(direction)->void:
 	
@@ -111,7 +114,8 @@ func beat_resolution_change(direction)->void:
 	SongData.beat_res_index = clamp(SongData.beat_res_index + direction,0,beat_mods.size()-1)
 	SongData.beat_resolution = beat_mods[SongData.beat_res_index]
 	
-	if (old_idx != SongData.beat_resolution):
+	
+	if (old_idx != SongData.beat_res_index):
 		beat_resolution_update()
 	
 	

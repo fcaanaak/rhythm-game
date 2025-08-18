@@ -1,0 +1,115 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.0.6 Chrome/138.0.7204.100 Electron/37.2.3 Safari/537.36" version="28.0.6">
+  <diagram name="Page-1" id="tp0sNwGdC9EN7CAxMzeP">
+    <mxGraphModel dx="1656" dy="531" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="NTyRAVkc5PEBsP6UY2xa-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="NTyRAVkc5PEBsP6UY2xa-1" target="NTyRAVkc5PEBsP6UY2xa-7" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="NTyRAVkc5PEBsP6UY2xa-1" value="Start" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.start_1;whiteSpace=wrap;" parent="1" vertex="1">
+          <mxGeometry x="270" y="40" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="NTyRAVkc5PEBsP6UY2xa-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="NTyRAVkc5PEBsP6UY2xa-2" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="460" y="490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NTyRAVkc5PEBsP6UY2xa-2" value="Wait for input" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" parent="1" vertex="1">
+          <mxGeometry x="280" y="350" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="NTyRAVkc5PEBsP6UY2xa-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="NTyRAVkc5PEBsP6UY2xa-7" target="NTyRAVkc5PEBsP6UY2xa-10" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="NTyRAVkc5PEBsP6UY2xa-7" value="Show or instantiate trackline partition arrow and place it&lt;div&gt;at start of TrackLine&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" parent="1" vertex="1">
+          <mxGeometry x="245" y="110" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="NTyRAVkc5PEBsP6UY2xa-9" value="" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.annotation_2;align=left;labelPosition=right;pointerEvents=1;" parent="1" vertex="1">
+          <mxGeometry x="170" y="100" width="50" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="NTyRAVkc5PEBsP6UY2xa-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="NTyRAVkc5PEBsP6UY2xa-10" target="NTyRAVkc5PEBsP6UY2xa-2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="NTyRAVkc5PEBsP6UY2xa-10" value="Partition the trackline into a starting number of sections (10 by default)" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" parent="1" vertex="1">
+          <mxGeometry x="245" y="210" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="NTyRAVkc5PEBsP6UY2xa-13" value="Initial setup" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="90" y="180" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="NTyRAVkc5PEBsP6UY2xa-14" value="Right arrow pressed" style="html=1;strokeWidth=2;shape=manualInput;whiteSpace=wrap;rounded=1;size=26;arcSize=11;" parent="1" vertex="1">
+          <mxGeometry x="425" y="460" width="90" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="tcbpJPxP6e6p9UgmKd5--3" value="Move partition arrow right one unit" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" parent="1" vertex="1">
+          <mxGeometry x="720" y="475" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="tcbpJPxP6e6p9UgmKd5--4" value="Left arrow pressed" style="html=1;strokeWidth=2;shape=manualInput;whiteSpace=wrap;rounded=1;size=26;arcSize=11;" parent="1" vertex="1">
+          <mxGeometry x="200" y="465" width="70" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="tcbpJPxP6e6p9UgmKd5--6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0.213;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="NTyRAVkc5PEBsP6UY2xa-2" target="tcbpJPxP6e6p9UgmKd5--4" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tcbpJPxP6e6p9UgmKd5--7" value="Move partition arrow left one unit" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" parent="1" vertex="1">
+          <mxGeometry x="-120" y="490" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="tcbpJPxP6e6p9UgmKd5--11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;" parent="1" source="tcbpJPxP6e6p9UgmKd5--9" target="tcbpJPxP6e6p9UgmKd5--7" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tcbpJPxP6e6p9UgmKd5--16" value="No" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="tcbpJPxP6e6p9UgmKd5--11" vertex="1" connectable="0">
+          <mxGeometry x="-0.2333" y="1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tcbpJPxP6e6p9UgmKd5--20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="tcbpJPxP6e6p9UgmKd5--9" target="tcbpJPxP6e6p9UgmKd5--17" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tcbpJPxP6e6p9UgmKd5--9" value="Is shift key held?" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" parent="1" vertex="1">
+          <mxGeometry x="40" y="445" width="120" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="tcbpJPxP6e6p9UgmKd5--10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="tcbpJPxP6e6p9UgmKd5--4" target="tcbpJPxP6e6p9UgmKd5--9" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tcbpJPxP6e6p9UgmKd5--14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="tcbpJPxP6e6p9UgmKd5--12" target="tcbpJPxP6e6p9UgmKd5--3" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tcbpJPxP6e6p9UgmKd5--15" value="No" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="tcbpJPxP6e6p9UgmKd5--14" vertex="1" connectable="0">
+          <mxGeometry x="-0.28" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tcbpJPxP6e6p9UgmKd5--19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="tcbpJPxP6e6p9UgmKd5--12" target="tcbpJPxP6e6p9UgmKd5--18" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tcbpJPxP6e6p9UgmKd5--12" value="Is shift key&lt;div&gt;held&lt;/div&gt;" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" parent="1" vertex="1">
+          <mxGeometry x="570" y="450" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="tcbpJPxP6e6p9UgmKd5--13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="NTyRAVkc5PEBsP6UY2xa-14" target="tcbpJPxP6e6p9UgmKd5--12" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tcbpJPxP6e6p9UgmKd5--17" value="Decrease partition resolution" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" parent="1" vertex="1">
+          <mxGeometry x="50" y="620" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="tcbpJPxP6e6p9UgmKd5--18" value="Increase partition resolution" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" parent="1" vertex="1">
+          <mxGeometry x="570" y="620" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="4WIsd4Nmt_UlMuTZB4rd-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="tcbpJPxP6e6p9UgmKd5--21" target="4WIsd4Nmt_UlMuTZB4rd-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tcbpJPxP6e6p9UgmKd5--21" value="Pressing number&lt;div&gt;keys 1-6&lt;/div&gt;" style="html=1;strokeWidth=2;shape=manualInput;whiteSpace=wrap;rounded=1;size=20;arcSize=11;" parent="1" vertex="1">
+          <mxGeometry x="285" y="525" width="110" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="4WIsd4Nmt_UlMuTZB4rd-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.518;entryY=0.113;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="NTyRAVkc5PEBsP6UY2xa-2" target="tcbpJPxP6e6p9UgmKd5--21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4WIsd4Nmt_UlMuTZB4rd-2" value="Select one of six tap note options" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="290" y="670" width="100" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="4WIsd4Nmt_UlMuTZB4rd-4" value="" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.annotation_2;align=left;labelPosition=right;pointerEvents=1;rotation=-180;" vertex="1" parent="1">
+          <mxGeometry x="390" y="655" width="50" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="4WIsd4Nmt_UlMuTZB4rd-5" value="Options are&amp;nbsp;&lt;div&gt;arranged as&amp;nbsp;&lt;/div&gt;&lt;div&gt;follows&lt;br&gt;1. Tap note&lt;/div&gt;&lt;div&gt;2. Tap left&lt;/div&gt;&lt;div&gt;3. Tap right&lt;/div&gt;&lt;div&gt;4. Tap both&lt;/div&gt;&lt;div&gt;5. Swipe left&lt;/div&gt;&lt;div&gt;6. Swipe right&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="425" y="630" width="100" height="140" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

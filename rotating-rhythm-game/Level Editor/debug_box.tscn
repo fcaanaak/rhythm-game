@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://0iumyb2iulqo"]
+
+[ext_resource type="Script" uid="uid://c280ih1fo6whp" path="res://Level Editor/debug_box.gd" id="1_26jdk"]
+
+[node name="DebugBox" type="VBoxContainer"]
+offset_left = 1055.0
+offset_top = 4.0
+offset_right = 1149.0
+offset_bottom = 251.0
+script = ExtResource("1_26jdk")
+
+[node name="BeatResolutionLabel" type="Label" parent="."]
+layout_mode = 2
+
+[node name="ZoomModIndexLabel" type="Label" parent="."]
+layout_mode = 2
+
+[node name="ZoomModLabel" type="Label" parent="."]
+layout_mode = 2
+
+[node name="SelectedBeatLabel" type="Label" parent="."]
+layout_mode = 2

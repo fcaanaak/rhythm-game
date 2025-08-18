@@ -1,0 +1,113 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.0.6 Chrome/138.0.7204.100 Electron/37.2.3 Safari/537.36" version="28.0.6">
+  <diagram name="Page-1" id="tYsqlzP5jdi1ZamPv-4x">
+    <mxGraphModel dx="806" dy="531" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="5G3xdh9HalkXhePx6fAN-1" value="Level-Navigate" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="75" y="170" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="5G3xdh9HalkXhePx6fAN-2" value="Note-Navigate" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="295" y="80" width="90" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="5G3xdh9HalkXhePx6fAN-3" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.98;exitY=0.37;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.044;entryY=0.678;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="5G3xdh9HalkXhePx6fAN-1" target="5G3xdh9HalkXhePx6fAN-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="245" y="330" as="sourcePoint" />
+            <mxPoint x="295" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5G3xdh9HalkXhePx6fAN-4" value="Select a TrackLine&lt;div&gt;(Enter)&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="5G3xdh9HalkXhePx6fAN-3">
+          <mxGeometry x="-0.3203" y="1" relative="1" as="geometry">
+            <mxPoint x="29" y="-1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5G3xdh9HalkXhePx6fAN-5" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.044;exitY=0.389;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="5G3xdh9HalkXhePx6fAN-2" target="5G3xdh9HalkXhePx6fAN-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="225" y="150" as="sourcePoint" />
+            <mxPoint x="275" y="100" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5G3xdh9HalkXhePx6fAN-6" value="Quit note nav&lt;div&gt;(Esc or Enter ?)&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="5G3xdh9HalkXhePx6fAN-5">
+          <mxGeometry x="-0.0348" y="-2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5G3xdh9HalkXhePx6fAN-7" value="Note-Create" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="495" y="190" width="90" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="5G3xdh9HalkXhePx6fAN-8" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="5G3xdh9HalkXhePx6fAN-2" target="5G3xdh9HalkXhePx6fAN-7">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="365" y="220" as="sourcePoint" />
+            <mxPoint x="415" y="170" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5G3xdh9HalkXhePx6fAN-9" value="Select a TrackLine&lt;div&gt;partition&lt;br&gt;(spacebar)&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="5G3xdh9HalkXhePx6fAN-8">
+          <mxGeometry x="-0.1315" y="-4" relative="1" as="geometry">
+            <mxPoint x="-8" y="-1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5G3xdh9HalkXhePx6fAN-10" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.189;exitY=0.067;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="5G3xdh9HalkXhePx6fAN-7" target="5G3xdh9HalkXhePx6fAN-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="704" y="110" as="sourcePoint" />
+            <mxPoint x="565" y="180" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5G3xdh9HalkXhePx6fAN-11" value="Finish placing a&lt;div&gt;note (spacebar)&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="5G3xdh9HalkXhePx6fAN-10">
+          <mxGeometry x="-0.0348" y="-2" relative="1" as="geometry">
+            <mxPoint x="3" y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5G3xdh9HalkXhePx6fAN-12" value="Level-Zoom" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="260" y="280" width="90" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="5G3xdh9HalkXhePx6fAN-13" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.96;exitY=0.68;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="5G3xdh9HalkXhePx6fAN-1" target="5G3xdh9HalkXhePx6fAN-12">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="205" y="280" as="sourcePoint" />
+            <mxPoint x="255" y="230" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5G3xdh9HalkXhePx6fAN-14" value="Enable zoom&lt;div&gt;(hold shift)&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="5G3xdh9HalkXhePx6fAN-13">
+          <mxGeometry x="-0.1977" y="-2" relative="1" as="geometry">
+            <mxPoint x="20" y="-8" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5G3xdh9HalkXhePx6fAN-15" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.79;entryY=0.94;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="5G3xdh9HalkXhePx6fAN-12" target="5G3xdh9HalkXhePx6fAN-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="155" y="350" as="sourcePoint" />
+            <mxPoint x="205" y="300" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5G3xdh9HalkXhePx6fAN-16" value="Disable zoom&lt;br&gt;(release shift)" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="5G3xdh9HalkXhePx6fAN-15">
+          <mxGeometry x="-0.2208" y="-3" relative="1" as="geometry">
+            <mxPoint x="-23" y="-8" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5G3xdh9HalkXhePx6fAN-17" value="Hold-Note-Create" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="685" y="300" width="90" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="5G3xdh9HalkXhePx6fAN-18" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.222;entryY=0.067;entryDx=0;entryDy=0;entryPerimeter=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="5G3xdh9HalkXhePx6fAN-7" target="5G3xdh9HalkXhePx6fAN-17">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="645" y="280" as="sourcePoint" />
+            <mxPoint x="695" y="230" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5G3xdh9HalkXhePx6fAN-19" value="Enable hold note mode&lt;div&gt;(down arrow)&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="5G3xdh9HalkXhePx6fAN-18">
+          <mxGeometry x="-0.0788" y="-2" relative="1" as="geometry">
+            <mxPoint x="20" y="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5G3xdh9HalkXhePx6fAN-20" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.756;entryY=0.911;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="5G3xdh9HalkXhePx6fAN-17" target="5G3xdh9HalkXhePx6fAN-7">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="535" y="400" as="sourcePoint" />
+            <mxPoint x="585" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5G3xdh9HalkXhePx6fAN-21" value="Disable hold note mode&lt;div&gt;(up arrow until&lt;/div&gt;&lt;div&gt;reach start note&lt;/div&gt;&lt;div&gt;or manual cancel)&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="5G3xdh9HalkXhePx6fAN-20">
+          <mxGeometry x="0.0255" y="-3" relative="1" as="geometry">
+            <mxPoint x="-9" y="20" as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,10 @@
+TODO:
+
+- Map out all the states found in the level editor and how they transition
+	eventually wanting to transition to using a State design pattern for level editor
+
+- Cover functionality found in each state in detail, plan which inputs do what and 
+	which new nodes or scenes will have to be created and how they interact with whats already there
+	
+
+- General refactoring
